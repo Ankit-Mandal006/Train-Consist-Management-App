@@ -1,31 +1,24 @@
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 public class TrainApp {
     public static void main(String[] args) {
         System.out.println("=== Train Consist Management App ===");
 
-        // UC6: Mapping Bogies to their respective Capacities using HashMap
-        Map<String, Integer> bogieCapacities = new HashMap<>();
+        // Create a list of Bogie objects
+        List<Bogie> passengerBogies = new ArrayList<>();
+        passengerBogies.add(new Bogie("Sleeper", 72));
+        passengerBogies.add(new Bogie("AC Chair", 56));
+        passengerBogies.add(new Bogie("First Class", 24));
 
-        // Mapping bogie types (Keys) to capacities (Values)
-        bogieCapacities.put("Sleeper", 72);
-        bogieCapacities.put("AC Chair", 56);
-        bogieCapacities.put("First Class", 24);
-        bogieCapacities.put("Cargo-Rect", 500); // 500 tons
-        bogieCapacities.put("Cargo-Cyl", 400);  // 400 tons
+        System.out.println("\n--- Before Sorting ---");
+        passengerBogies.forEach(System.out::println);
 
-        System.out.println("\n--- Bogie Capacity Mapping Registered ---");
+        // Sort by capacity using Comparator and Lambda expression
+        passengerBogies.sort(Comparator.comparingInt(Bogie::getCapacity));
 
-        // Iterating through the map using entrySet() to display all data
-        for (Map.Entry<String, Integer> entry : bogieCapacities.entrySet()) {
-            System.out.println("Bogie Type: " + entry.getKey() + " | Capacity: " + entry.getValue());
-        }
-
-        // Fast Lookup Example
-        String searchBogie = "AC Chair";
-        if (bogieCapacities.containsKey(searchBogie)) {
-            System.out.println("\nQuick Search: " + searchBogie + " has a capacity of " + bogieCapacities.get(searchBogie) + " units.");
-        }
+        System.out.println("\n--- Sorted by Capacity (Low to High) ---");
+        passengerBogies.forEach(System.out::println);
     }
 }
