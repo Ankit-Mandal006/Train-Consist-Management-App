@@ -1,38 +1,32 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class TrainApp {
     public static void main(String[] args) {
         System.out.println("=== Train Consist Management App ===");
 
-        // UC1: Initialize Train
-        List<String> bogies = new ArrayList<>();
-        System.out.println("Initial bogie count: " + bogies.size());
+        // UC3: Track Unique Bogie IDs using HashSet
+        System.out.println("\n--- Registering Bogie IDs ---");
 
-        // UC2: Add Passenger Bogies
-        System.out.println("\n--- Adding Passenger Bogies ---");
-        bogies.add("Sleeper");
-        bogies.add("AC Chair");
-        bogies.add("First Class");
+        Set<String> bogieIds = new HashSet<>();
 
-        System.out.println("Current Consist: " + bogies);
-        System.out.println("Bogie count: " + bogies.size());
+        // Adding unique and duplicate IDs
+        bogieIds.add("BG101");
+        bogieIds.add("BG102");
+        bogieIds.add("BG103");
 
-        // Removing a bogie
-        System.out.println("\n--- Removing AC Chair ---");
-        bogies.remove("AC Chair");
-        System.out.println("Consist after removal: " + bogies);
+        // Attempting to add a duplicate ID
+        System.out.println("Attempting to add duplicate ID: BG101");
+        bogieIds.add("BG101");
 
-        // Checking existence
-        System.out.println("\n--- Checking Bogie Status ---");
-        if (bogies.contains("Sleeper")) {
-            System.out.println("Sleeper bogie is present in the consist.");
-        } else {
-            System.out.println("Sleeper bogie is not found.");
+        // Displaying the Set
+        System.out.println("Unique Bogie IDs in System: " + bogieIds);
+        System.out.println("Total Unique Bogies: " + bogieIds.size());
+
+        // Checking existence of a specific ID
+        String searchId = "BG102";
+        if (bogieIds.contains(searchId)) {
+            System.out.println("ID " + searchId + " is valid and registered.");
         }
-
-        // Final State
-        System.out.println("\nFinal Bogie count: " + bogies.size());
-        System.out.println("Final Consist Summary: " + bogies);
     }
 }
