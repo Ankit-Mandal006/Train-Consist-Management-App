@@ -1,25 +1,44 @@
-import java.util.Arrays;
-
 public class TrainApp {
     public static void main(String[] args) {
         System.out.println("=== Train Consist Management App ===");
-        System.out.println("--- Library-Based Sorting: Bogie Types ---\n");
+        System.out.println("--- Linear Search: Locating Bogie ID ---\n");
 
-        // 1. Initialize an unsorted array of bogie type names
-        String[] bogieTypes = {"Sleeper", "AC Chair", "First Class", "General", "Luxury"};
+        // 1. Initialize an array of unsorted bogie IDs
+        String[] bogieIds = {"BG101", "BG205", "BG309", "BG412", "BG550"};
 
-        System.out.println("Before Sorting: " + Arrays.toString(bogieTypes));
+        // 2. Define search keys (one existing, one missing)
+        String searchKey1 = "BG309";
+        String searchKey2 = "BG999";
 
-        // 2. Use Java's built-in optimized sorting utility
-        // This handles alphabetical order (Natural Ordering) automatically
-        Arrays.sort(bogieTypes);
+        // 3. Execute searches
+        performLinearSearch(bogieIds, searchKey1);
+        performLinearSearch(bogieIds, searchKey2);
+    }
 
-        // 3. Display the sorted result
-        System.out.println("After Sorting : " + Arrays.toString(bogieTypes));
+    /**
+     * Performs a Linear Search on the provided array.
+     */
+    public static void performLinearSearch(String[] ids, String key) {
+        boolean found = false;
+        int position = -1;
 
-        // Demonstrating duplicate handling
-        String[] duplicates = {"Sleeper", "AC Chair", "Sleeper", "General"};
-        Arrays.sort(duplicates);
-        System.out.println("\nDuplicate Handling Example: " + Arrays.toString(duplicates));
+        System.out.println("Searching for Bogie ID: " + key + "...");
+
+        // Sequential Traversal
+        for (int i = 0; i < ids.length; i++) {
+            // Using .equals() for safe string comparison
+            if (ids[i].equals(key)) {
+                found = true;
+                position = i;
+                break; // Early Termination: stop as soon as we find it
+            }
+        }
+
+        if (found) {
+            System.out.println("[SUCCESS] Bogie " + key + " found at position: " + (position + 1));
+        } else {
+            System.out.println("[NOT FOUND] Bogie " + key + " does not exist in the consist.");
+        }
+        System.out.println("----------------------------------------------");
     }
 }
