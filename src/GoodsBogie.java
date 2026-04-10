@@ -1,17 +1,19 @@
 public class GoodsBogie {
-    private String type;
+    private String shape;
     private String cargo;
 
-    public GoodsBogie(String type, String cargo) {
-        this.type = type;
-        this.cargo = cargo;
+    public GoodsBogie(String shape) {
+        this.shape = shape;
     }
 
-    public String getType() { return type; }
-    public String getCargo() { return cargo; }
-
-    @Override
-    public String toString() {
-        return "Bogie Type: " + type + " | Cargo: " + cargo;
+    public void assignCargo(String newCargo) {
+        // Business Rule: Rectangular bogies cannot carry Petroleum
+        if (this.shape.equalsIgnoreCase("Rectangular") && newCargo.equalsIgnoreCase("Petroleum")) {
+            throw new CargoSafetyException("Safety Violation: Rectangular bogies cannot carry Petroleum!");
+        }
+        this.cargo = newCargo;
+        System.out.println("Assignment Successful: " + newCargo + " loaded into " + shape + " bogie.");
     }
+
+    public String getShape() { return shape; }
 }
