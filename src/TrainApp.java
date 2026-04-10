@@ -1,32 +1,43 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TrainApp {
     public static void main(String[] args) {
         System.out.println("=== Train Consist Management App ===");
+        System.out.println("--- Input Format Validation ---");
 
-        // Initializing the list with various passenger bogies
-        List<Bogie> bogies = new ArrayList<>();
-        bogies.add(new Bogie("Sleeper", 72));
-        bogies.add(new Bogie("AC Chair", 56));
-        bogies.add(new Bogie("First Class", 24));
-        bogies.add(new Bogie("Sleeper-Economy", 80));
+        // 1. Define Regex Patterns
+        // TRN- followed by exactly 4 digits
+        String trainIdRegex = "TRN-\\d{4}";
+        // PET- followed by exactly 2 uppercase letters
+        String cargoCodeRegex = "PET-[A-Z]{2}";
 
-        System.out.println("\nAnalyzing Train Capacity...");
-        bogies.forEach(b -> System.out.println("Adding: " + b));
+        // 2. Sample Inputs for Testing
+        String[] testTrainIds = {"TRN-1234", "TRAIN12", "TRN-123", "TRN-12345"};
+        String[] testCargoCodes = {"PET-AB", "PET-ab", "PET-12", "PET-XYZ"};
 
-        // UC10: Aggregate seating capacities using map() and reduce()
-        // map() transforms Bogie objects into Integers
-        // reduce() sums them up starting from an identity of 0
-        int totalSeats = bogies.stream()
-                .map(Bogie::getCapacity)
-                .reduce(0, Integer::sum);
+        // 3. Validate Train IDs
+        System.out.println("\nValidating Train IDs (Format: TRN-xxxx):");
+        Pattern trainPattern = Pattern.compile(trainIdRegex);
+        for (String id : testTrainIds) {
+            Matcher matcher = trainPattern.matcher(id);
+            if (matcher.matches()) {
+                System.out.println("[VALID]   " + id);
+            } else {
+                System.out.println("[INVALID] " + id + " -> Must be TRN- followed by 4 digits.");
+            }
+        }
 
-        System.out.println("\n------------------------------------");
-        System.out.println("TOTAL SEATING CAPACITY: " + totalSeats);
-        System.out.println("------------------------------------");
-
-        // Verification of Original Collection Integrity
-        System.out.println("Original bogie list remains intact. Total bogies: " + bogies.size());
+        // 4. Validate Cargo Codes
+        System.out.println("\nValidating Cargo Codes (Format: PET-XX):");
+        Pattern cargoPattern = Pattern.compile(cargoCodeRegex);
+        for (String code : testCargoCodes) {
+            Matcher matcher = cargoPattern.matcher(code);
+            if (matcher.matches()) {
+                System.out.println("[VALID]   " + code);
+            } else {
+                System.out.println("[INVALID] " + code + " -> Must be PET- followed by 2 uppercase letters.");
+            }
+        }
     }
 }
