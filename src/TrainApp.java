@@ -1,42 +1,50 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TrainApp {
     public static void main(String[] args) {
         System.out.println("=== Train Consist Management App ===");
-        System.out.println("--- Safety Compliance Check ---");
+        System.out.println("--- Performance Benchmarking: Loop vs Stream ---\n");
 
-        // 1. Prepare Goods Bogies
-        List<GoodsBogie> goodsConsist = new ArrayList<>();
-        goodsConsist.add(new GoodsBogie("Rectangular", "Coal"));
-        goodsConsist.add(new GoodsBogie("Cylindrical", "Petroleum"));
-        goodsConsist.add(new GoodsBogie("Rectangular", "Grain"));
-
-        // Uncomment the line below to test a safety violation:
-        // goodsConsist.add(new GoodsBogie("Cylindrical", "Coal"));
-
-        System.out.println("\nCurrent Consist for Inspection:");
-        goodsConsist.forEach(System.out::println);
-
-        // 2. Define Safety Rule:
-        // IF type is Cylindrical, THEN cargo MUST be Petroleum.
-        // For all other types, any cargo is allowed.
-        boolean isSafe = goodsConsist.stream().allMatch(b -> {
-            if (b.getType().equalsIgnoreCase("Cylindrical")) {
-                return b.getCargo().equalsIgnoreCase("Petroleum");
-            }
-            return true; // Non-cylindrical bogies pass this specific rule
-        });
-
-        // 3. Display Result
-        System.out.println("\n------------------------------------");
-        if (isSafe) {
-            System.out.println("STATUS: [SAFE]");
-            System.out.println("All safety protocols met. Ready for departure.");
-        } else {
-            System.out.println("STATUS: [UNSAFE - VIOLATION DETECTED]");
-            System.out.println("Emergency: Cylindrical bogies found with non-Petroleum cargo!");
+        // 1. Prepare a larger dataset for meaningful results
+        List<Bogie> dataset = new ArrayList<>();
+        for (int i = 0; i < 10000; i++) {
+            dataset.add(new Bogie("Bogie-" + i, (int) (Math.random() * 100)));
         }
-        System.out.println("------------------------------------");
+
+        // 2. Measure Loop-Based Filtering
+        long loopStart = System.nanoTime();
+        List<Bogie> loopFiltered = new ArrayList<>();
+        for (Bogie b : dataset) {
+            if (b.getCapacity() > 60) {
+                loopFiltered.add(b);
+            }
+        }
+        long loopEnd = System.nanoTime();
+        long loopDuration = loopEnd - loopStart;
+
+        // 3. Measure Stream-Based Filtering
+        long streamStart = System.nanoTime();
+        List<Bogie> streamFiltered = dataset.stream()
+                .filter(b -> b.getCapacity() > 60)
+                .collect(Collectors.toList());
+        long streamEnd = System.nanoTime();
+        long streamDuration = streamEnd - streamStart;
+
+        // 4. Display Results and Comparison
+        System.out.println("Dataset Size: " + dataset.size() + " bogies");
+        System.out.println("Loop Filtered Count: " + loopFiltered.size());
+        System.out.println("Stream Filtered Count: " + streamFiltered.size());
+
+        System.out.println("\nExecution Time Statistics:");
+        System.out.println("Loop Execution Time   : " + loopDuration + " nanoseconds");
+        System.out.println("Stream Execution Time : " + streamDuration + " nanoseconds");
+
+        if (loopDuration < streamDuration) {
+            System.out.println("\nResult: Traditional Loop was faster by " + (streamDuration - loopDuration) + " ns.");
+        } else {
+            System.out.println("\nResult: Stream API was faster by " + (loopDuration - streamDuration) + " ns.");
+        }
     }
 }

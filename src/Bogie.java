@@ -7,11 +7,5 @@ public class Bogie {
         this.capacity = capacity;
     }
 
-    public String getName() { return name; }
     public int getCapacity() { return capacity; }
-
-    @Override
-    public String toString() {
-        return name + " (" + capacity + " seats)";
-    }
 }
