@@ -3,53 +3,46 @@ import java.util.Arrays;
 public class TrainApp {
     public static void main(String[] args) {
         System.out.println("=== Train Consist Management App ===");
-        System.out.println("--- Binary Search: Optimized ID Lookup ---\n");
+        System.out.println("--- Defensive Search Operations ---\n");
 
-        // 1. Initial Data (Unsorted to test the precondition)
-        String[] bogieIds = {"BG309", "BG101", "BG550", "BG205", "BG412"};
+        // Scenario 1: Empty Train (Should fail fast)
+        String[] emptyConsist = {};
+        try {
+            System.out.println("Attempting to search an empty train...");
+            searchBogie(emptyConsist, "BG101");
+        } catch (IllegalStateException e) {
+            System.out.println("[GUARD] " + e.getMessage());
+        }
 
-        // 2. PRECONDITION: Data must be sorted for Binary Search to work
-        Arrays.sort(bogieIds);
-        System.out.println("Sorted Consist IDs: " + Arrays.toString(bogieIds));
+        System.out.println("----------------------------------------------");
 
-        // 3. Define search keys
-        String targetFound = "BG205";
-        String targetNotFound = "BG999";
-
-        // 4. Perform Searches
-        executeBinarySearch(bogieIds, targetFound);
-        executeBinarySearch(bogieIds, targetNotFound);
+        // Scenario 2: Formed Train (Should proceed normally)
+        String[] formedConsist = {"BG101", "BG205", "BG309"};
+        try {
+            System.out.println("Attempting to search a formed train...");
+            boolean found = searchBogie(formedConsist, "BG205");
+            System.out.println("Bogie BG205 Found: " + found);
+        } catch (IllegalStateException e) {
+            System.out.println("[GUARD] Error: " + e.getMessage());
+        }
     }
 
-    public static void executeBinarySearch(String[] arr, String key) {
-        int low = 0;
-        int high = arr.length - 1;
-        int position = -1;
-        boolean found = false;
+    /**
+     * Searches for a bogie ID but validates the state of the collection first.
+     * @throws IllegalStateException if the consist array is null or empty.
+     */
+    public static boolean searchBogie(String[] consist, String targetId) {
+        // Defensive Check: State Validation
+        if (consist == null || consist.length == 0) {
+            throw new IllegalStateException("Search Denied: The train consist has not been formed yet.");
+        }
 
-        System.out.println("\nSearching for: " + key);
-
-        while (low <= high) {
-            int mid = low + (high - low) / 2; // Prevents potential integer overflow
-
-            // compareTo() returns 0 if strings are equal
-            int comparison = key.compareTo(arr[mid]);
-
-            if (comparison == 0) {
-                found = true;
-                position = mid;
-                break; // Found the bogie!
-            } else if (comparison > 0) {
-                low = mid + 1; // Target is in the right half
-            } else {
-                high = mid - 1; // Target is in the left half
+        // Proceeding with standard Linear Search if state is valid
+        for (String id : consist) {
+            if (id.equals(targetId)) {
+                return true;
             }
         }
-
-        if (found) {
-            System.out.println("[SUCCESS] Bogie " + key + " located at sorted index: " + position);
-        } else {
-            System.out.println("[NOT FOUND] Bogie " + key + " is not in the system.");
-        }
+        return false;
     }
 }
