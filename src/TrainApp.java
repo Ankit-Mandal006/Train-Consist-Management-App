@@ -1,34 +1,31 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class TrainApp {
     public static void main(String[] args) {
         System.out.println("=== Train Consist Management App ===");
 
-        // Initializing the list with various passenger bogies
+        // Initializing the list with multiple bogies of the same and different types
         List<Bogie> bogies = new ArrayList<>();
         bogies.add(new Bogie("Sleeper", 72));
         bogies.add(new Bogie("AC Chair", 56));
+        bogies.add(new Bogie("Sleeper", 72));
         bogies.add(new Bogie("First Class", 24));
-        bogies.add(new Bogie("Sleeper-Economy", 80));
+        bogies.add(new Bogie("AC Chair", 56));
 
-        System.out.println("\nFull Train Consist:");
-        bogies.forEach(System.out::println);
+        // UC9: Grouping bogies by their type (name) using Collectors.groupingBy
+        Map<String, List<Bogie>> groupedBogies = bogies.stream()
+                .collect(Collectors.groupingBy(Bogie::getName));
 
-        // UC8: Filtering bogies with capacity > 60 using Stream API
-        List<Bogie> highCapacityBogies = bogies.stream()
-                .filter(b -> b.getCapacity() > 60)
-                .collect(Collectors.toList());
-
-        System.out.println("\n--- High Capacity Bogies ( > 60 seats) ---");
-        if (highCapacityBogies.isEmpty()) {
-            System.out.println("No bogies match the criteria.");
-        } else {
-            highCapacityBogies.forEach(System.out::println);
-        }
+        System.out.println("\n--- Bogies Grouped by Type ---");
+        groupedBogies.forEach((type, bogieList) -> {
+            System.out.println("Category: " + type + " | Count: " + bogieList.size());
+            bogieList.forEach(b -> System.out.println("  -> " + b));
+        });
 
         // Verification of Original Collection Integrity
-        System.out.println("\nOriginal list size remains: " + bogies.size());
+        System.out.println("\nOriginal list remains untouched. Size: " + bogies.size());
     }
 }
