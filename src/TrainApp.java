@@ -1,44 +1,55 @@
+import java.util.Arrays;
+
 public class TrainApp {
     public static void main(String[] args) {
         System.out.println("=== Train Consist Management App ===");
-        System.out.println("--- Linear Search: Locating Bogie ID ---\n");
+        System.out.println("--- Binary Search: Optimized ID Lookup ---\n");
 
-        // 1. Initialize an array of unsorted bogie IDs
-        String[] bogieIds = {"BG101", "BG205", "BG309", "BG412", "BG550"};
+        // 1. Initial Data (Unsorted to test the precondition)
+        String[] bogieIds = {"BG309", "BG101", "BG550", "BG205", "BG412"};
 
-        // 2. Define search keys (one existing, one missing)
-        String searchKey1 = "BG309";
-        String searchKey2 = "BG999";
+        // 2. PRECONDITION: Data must be sorted for Binary Search to work
+        Arrays.sort(bogieIds);
+        System.out.println("Sorted Consist IDs: " + Arrays.toString(bogieIds));
 
-        // 3. Execute searches
-        performLinearSearch(bogieIds, searchKey1);
-        performLinearSearch(bogieIds, searchKey2);
+        // 3. Define search keys
+        String targetFound = "BG205";
+        String targetNotFound = "BG999";
+
+        // 4. Perform Searches
+        executeBinarySearch(bogieIds, targetFound);
+        executeBinarySearch(bogieIds, targetNotFound);
     }
 
-    /**
-     * Performs a Linear Search on the provided array.
-     */
-    public static void performLinearSearch(String[] ids, String key) {
-        boolean found = false;
+    public static void executeBinarySearch(String[] arr, String key) {
+        int low = 0;
+        int high = arr.length - 1;
         int position = -1;
+        boolean found = false;
 
-        System.out.println("Searching for Bogie ID: " + key + "...");
+        System.out.println("\nSearching for: " + key);
 
-        // Sequential Traversal
-        for (int i = 0; i < ids.length; i++) {
-            // Using .equals() for safe string comparison
-            if (ids[i].equals(key)) {
+        while (low <= high) {
+            int mid = low + (high - low) / 2; // Prevents potential integer overflow
+
+            // compareTo() returns 0 if strings are equal
+            int comparison = key.compareTo(arr[mid]);
+
+            if (comparison == 0) {
                 found = true;
-                position = i;
-                break; // Early Termination: stop as soon as we find it
+                position = mid;
+                break; // Found the bogie!
+            } else if (comparison > 0) {
+                low = mid + 1; // Target is in the right half
+            } else {
+                high = mid - 1; // Target is in the left half
             }
         }
 
         if (found) {
-            System.out.println("[SUCCESS] Bogie " + key + " found at position: " + (position + 1));
+            System.out.println("[SUCCESS] Bogie " + key + " located at sorted index: " + position);
         } else {
-            System.out.println("[NOT FOUND] Bogie " + key + " does not exist in the consist.");
+            System.out.println("[NOT FOUND] Bogie " + key + " is not in the system.");
         }
-        System.out.println("----------------------------------------------");
     }
 }
