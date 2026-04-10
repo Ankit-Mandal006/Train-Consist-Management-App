@@ -1,30 +1,30 @@
 public class TrainApp {
     public static void main(String[] args) {
         System.out.println("=== Train Consist Management App ===");
-        System.out.println("--- Handling Invalid Bogie Capacity ---\n");
+        System.out.println("--- Cargo Assignment Safety Monitor ---\n");
 
-        // Test Case 1: Valid Capacity
-        try {
-            Bogie validBogie = new Bogie("Sleeper", 72);
-            System.out.println("[SUCCESS] Created: " + validBogie);
-        } catch (InvalidCapacityException e) {
-            System.out.println("[ERROR] Failed to create bogie: " + e.getMessage());
-        }
+        GoodsBogie rectangularBogie = new GoodsBogie("Rectangular");
+        GoodsBogie cylindricalBogie = new GoodsBogie("Cylindrical");
 
-        // Test Case 2: Zero Capacity
-        try {
-            System.out.println("\nAttempting to create bogie with 0 capacity...");
-            Bogie zeroBogie = new Bogie("AC Chair", 0);
-        } catch (InvalidCapacityException e) {
-            System.out.println("[CAUGHT EXPECTED ERROR] " + e.getMessage());
-        }
+        // Scenario 1: Safe Assignment
+        processCargoAssignment(cylindricalBogie, "Petroleum");
 
-        // Test Case 3: Negative Capacity
+        // Scenario 2: Unsafe Assignment
+        processCargoAssignment(rectangularBogie, "Petroleum");
+
+        System.out.println("\nApplication state: Operational. System continuing...");
+    }
+
+    public static void processCargoAssignment(GoodsBogie bogie, String cargo) {
+        System.out.println("Attempting to assign " + cargo + " to " + bogie.getShape() + " bogie...");
+
         try {
-            System.out.println("\nAttempting to create bogie with -10 capacity...");
-            Bogie negativeBogie = new Bogie("First Class", -10);
-        } catch (InvalidCapacityException e) {
-            System.out.println("[CAUGHT EXPECTED ERROR] " + e.getMessage());
+            bogie.assignCargo(cargo);
+        } catch (CargoSafetyException e) {
+            System.err.println("[ALERT] " + e.getMessage());
+        } finally {
+            System.out.println("[SYSTEM LOG] Safety check completed for " + bogie.getShape() + " unit.");
         }
+        System.out.println("----------------------------------------------");
     }
 }
