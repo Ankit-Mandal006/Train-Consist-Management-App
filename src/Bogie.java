@@ -12,6 +12,6 @@ public class Bogie {
 
     @Override
     public String toString() {
-        return "Bogie{name='" + name + "', capacity=" + capacity + "}";
+        return name + " (" + capacity + " seats)";
     }
 }
