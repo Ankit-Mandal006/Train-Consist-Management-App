@@ -1,36 +1,25 @@
+import java.util.Arrays;
+
 public class TrainApp {
     public static void main(String[] args) {
         System.out.println("=== Train Consist Management App ===");
-        System.out.println("--- Bubble Sort: Capacity Ordering ---\n");
+        System.out.println("--- Library-Based Sorting: Bogie Types ---\n");
 
-        // 1. Initialize array of passenger bogie capacities
-        int[] capacities = {72, 56, 24, 70, 60};
+        // 1. Initialize an unsorted array of bogie type names
+        String[] bogieTypes = {"Sleeper", "AC Chair", "First Class", "General", "Luxury"};
 
-        System.out.print("Before Sorting: ");
-        printArray(capacities);
+        System.out.println("Before Sorting: " + Arrays.toString(bogieTypes));
 
-        // 2. Bubble Sort Logic
-        int n = capacities.length;
-        for (int i = 0; i < n - 1; i++) {
-            for (int j = 0; j < n - i - 1; j++) {
-                // Swap if the element found is greater than the next element
-                if (capacities[j] > capacities[j + 1]) {
-                    int temp = capacities[j];
-                    capacities[j] = capacities[j + 1];
-                    capacities[j + 1] = temp;
-                }
-            }
-        }
+        // 2. Use Java's built-in optimized sorting utility
+        // This handles alphabetical order (Natural Ordering) automatically
+        Arrays.sort(bogieTypes);
 
-        System.out.print("After Sorting : ");
-        printArray(capacities);
-    }
+        // 3. Display the sorted result
+        System.out.println("After Sorting : " + Arrays.toString(bogieTypes));
 
-    // Helper method to display array
-    public static void printArray(int[] arr) {
-        for (int val : arr) {
-            System.out.print(val + " ");
-        }
-        System.out.println();
+        // Demonstrating duplicate handling
+        String[] duplicates = {"Sleeper", "AC Chair", "Sleeper", "General"};
+        Arrays.sort(duplicates);
+        System.out.println("\nDuplicate Handling Example: " + Arrays.toString(duplicates));
     }
 }
